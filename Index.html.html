@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ნინო ბერიძე — ფოტოგრაფი</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@200;300;400&family=Noto+Serif+Georgian:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f3ef;
+    --gray-100: #e8e5e0;
+    --gray-200: #c8c4bc;
+    --gray-400: #8a8680;
+    --gray-600: #4a4744;
+    --accent: #c9b99a;
+    --accent-light: #e8ddd0;
+    --duration-fast: 0.4s;
+    --duration-med: 0.8s;
+    --duration-slow: 1.4s;
+    --ease-luxury: cubic-bezier(0.25, 0.1, 0.0, 1.0);
+    --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+  }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Noto Serif Georgian', 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+  }
+  .cursor-dot {
+    width: 8px; height: 8px;
+    background: var(--white);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s var(--ease-luxury), width 0.3s, height 0.3s;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(245,243,239,0.5);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.25s var(--ease-luxury), width 0.4s, height 0.4s, border-color 0.3s;
+  }
+  .cursor-dot, .cursor-ring { position: absolute; top: 0; left: 0; }
+
+  body:has(a:hover) .cursor-ring,
+  body:has(button:hover) .cursor-ring {
+    width: 60px; height: 60px;
+    border-color: var(--accent);
+  }
+
+  /* LOADER */
+  #loader {
+    position: fixed; inset: 0;
+    background: var(--black);
+    z-index: 9998;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    gap: 2rem;
+    transition: opacity 1s var(--ease-luxury), visibility 1s;
+  }
+  #loader.hidden { opacity: 0; visibility: hidden; }
+  .loader-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 300;
+    letter-spacing: 0.4em;
+    color: var(--gray-400);
+    text-transform: uppercase;
+  }
+  .loader-bar-wrap {
+    width: 200px; height: 1px;
+    background: var(--gray-600);
+    position: relative; overflow: hidden;
+  }
+  .loader-bar {
+    position: absolute; inset: 0;
+    background: var(--accent);
+    transform: translateX(-100%);
+    animation: loadBar 1.8s var(--ease-reveal) forwards;
+  }
+  @keyframes loadBar { to { transform: translateX(0); } }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 2rem 4%;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background 0.6s var(--ease-luxury), padding 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.9);
+    backdrop-filter: blur(20px);
+    padding: 1.2rem 4%;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 1.3rem;
+    letter-spacing: 0.2em;
+    color: var(--white);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .nav-links {
+    display: flex; gap: 3rem; list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    color: var(--gray-200);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0; right: 100%;
+    height: 1px; background: var(--accent);
+    transition: right 0.4s var(--ease-luxury);
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { right: 0; }
+
+  .nav-menu-btn {
+    display: none;
+    flex-direction: column; gap: 5px; cursor: none;
+    background: none; border: none; padding: 4px;
+  }
+  .nav-menu-btn span {
+    display: block; width: 24px; height: 1px;
+    background: var(--white);
+    transition: transform 0.4s var(--ease-luxury), opacity 0.3s;
+  }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-menu-btn { display: flex; }
+  }
+
+  /* MOBILE MENU */
+  .mobile-menu {
+    position: fixed; inset: 0; z-index: 99;
+    background: var(--black);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.5s var(--ease-luxury), visibility 0.5s;
+  }
+  .mobile-menu.open { opacity: 1; visibility: visible; }
+  .mobile-menu ul { list-style: none; text-align: center; }
+  .mobile-menu ul li { margin: 2rem 0; }
+  .mobile-menu ul a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem; font-weight: 300;
+    color: var(--white); text-decoration: none;
+    letter-spacing: 0.1em;
+    transition: color 0.3s;
+  }
+  .mobile-menu ul a:hover { color: var(--accent); }
+
+  /* SECTION BASE */
+  section { position: relative; }
+
+  /* REVEAL ANIMATION */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity var(--duration-slow) var(--ease-reveal),
+                transform var(--duration-slow) var(--ease-reveal);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.15s; }
+  .reveal-delay-2 { transition-delay: 0.3s; }
+  .reveal-delay-3 { transition-delay: 0.45s; }
+  .reveal-delay-4 { transition-delay: 0.6s; }
+
+  /* ═══════════════════════════════════════
+     HERO SECTION
+  ═══════════════════════════════════════ */
+  #hero {
+    height: 100vh; min-height: 700px;
+    position: relative;
+    display: flex; align-items: flex-end;
+    padding: 0 6% 8%;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: 
+      linear-gradient(to bottom, rgba(10,10,10,0.2) 0%, rgba(10,10,10,0.85) 100%),
+      url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80&auto=format&fit=crop') center/cover no-repeat;
+    transform: scale(1.08);
+    animation: heroZoom 12s var(--ease-luxury) forwards;
+    filter: grayscale(30%) contrast(1.05);
+  }
+  @keyframes heroZoom { to { transform: scale(1); } }
+
+  .hero-grain {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 900px; }
+
+  .hero-eyebrow {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    font-size: 0.65rem;
+    letter-spacing: 0.5em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 1s 1.8s var(--ease-reveal) forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 9vw, 8rem);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 1.2s 2s var(--ease-reveal) forwards;
+  }
+  .hero-title em { font-style: italic; color: var(--accent-light); }
+
+  .hero-sub {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    color: var(--gray-200);
+    max-width: 420px;
+    line-height: 2;
+    margin-bottom: 3.5rem;
+    opacity: 0;
+    animation: fadeUp 1s 2.3s var(--ease-reveal) forwards;
+  }
+
+  .hero-ctas {
+    display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 1s 2.6s var(--ease-reveal) forwards;
+  }
+
+  .btn-primary {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--accent);
+    border: none;
+    padding: 1.1rem 2.8rem;
+    cursor: none;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.3s, letter-spacing 0.4s var(--ease-luxury), transform 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--white);
+    transform: translateX(-101%);
+    transition: transform 0.5s var(--ease-luxury);
+  }
+  .btn-primary:hover::before { transform: translateX(0); }
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-primary:hover { letter-spacing: 0.4em; }
+
+  .btn-ghost {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gray-200);
+    background: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 1.1rem 2.8rem;
+    cursor: none;
+    text-decoration: none;
+    display: inline-block;
+    transition: color 0.3s, border-color 0.3s, letter-spacing 0.4s var(--ease-luxury);
+  }
+  .btn-ghost:hover {
+    color: var(--white);
+    border-color: rgba(255,255,255,0.5);
+    letter-spacing: 0.4em;
+  }
+
+  .hero-scroll {
+    position: absolute; bottom: 4rem; right: 6%;
+    display: flex; flex-direction: column; align-items: center; gap: 0.8rem;
+    opacity: 0;
+    animation: fadeUp 1s 3s var(--ease-reveal) forwards;
+  }
+  .hero-scroll span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.55rem; letter-spacing: 0.4em;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+  }
+  .scroll-line {
+    width: 1px; height: 60px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: scrollPulse 2s infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.1); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ═══════════════════════════════════════
+     MARQUEE STRIP
+  ═══════════════════════════════════════ */
+  .marquee-strip {
+    background: var(--accent);
+    padding: 0.9rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee-track {
+    display: inline-flex;
+    animation: marquee 20s linear infinite;
+  }
+  .marquee-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--black);
+    letter-spacing: 0.1em;
+    padding: 0 3rem;
+  }
+  .marquee-dot { color: var(--black); opacity: 0.4; }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ═══════════════════════════════════════
+     PORTFOLIO SECTION
+  ═══════════════════════════════════════ */
+  #portfolio {
+    padding: 8rem 4%;
+    background: var(--black);
+  }
+  .section-header {
+    text-align: center;
+    margin-bottom: 5rem;
+  }
+  .section-eyebrow {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    font-size: 0.6rem;
+    letter-spacing: 0.5em;
+    color: var(--accent);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 1.2rem;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  .section-title em { font-style: italic; color: var(--accent-light); }
+  .section-divider {
+    width: 1px; height: 60px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    margin: 2rem auto;
+  }
+
+  /* Portfolio Tabs */
+  .portfolio-tabs {
+    display: flex; justify-content: center; gap: 0; margin-bottom: 4rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    width: fit-content; margin-left: auto; margin-right: auto;
+  }
+  .tab-btn {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    background: none;
+    border: none;
+    padding: 1rem 2.5rem;
+    cursor: none;
+    transition: color 0.3s, background 0.3s;
+    position: relative;
+  }
+  .tab-btn.active {
+    color: var(--black);
+    background: var(--accent);
+  }
+  .tab-btn:not(.active):hover { color: var(--white); }
+
+  /* Masonry Grid */
+  .portfolio-grid {
+    columns: 3;
+    column-gap: 1rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  @media (max-width: 1024px) { .portfolio-grid { columns: 2; } }
+  @media (max-width: 600px) { .portfolio-grid { columns: 1; } }
+
+  .portfolio-item {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    display: block;
+  }
+  .portfolio-item img {
+    width: 100%; height: auto;
+    display: block;
+    filter: grayscale(20%) contrast(1.05);
+    transition: transform 0.8s var(--ease-luxury), filter 0.6s;
+  }
+  .portfolio-item:hover img {
+    transform: scale(1.04);
+    filter: grayscale(0%) contrast(1.1);
+  }
+  .portfolio-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.8) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.5s var(--ease-luxury);
+    display: flex; align-items: flex-end; padding: 1.5rem;
+  }
+  .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+  .portfolio-caption {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem; font-weight: 300;
+    color: var(--white); letter-spacing: 0.05em;
+  }
+
+  /* Hidden tab content */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 500;
+    background: rgba(10,10,10,0.97);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.4s var(--ease-luxury), visibility 0.4s;
+  }
+  .lightbox.open { opacity: 1; visibility: visible; }
+  .lightbox img {
+    max-width: 90vw; max-height: 90vh;
+    object-fit: contain;
+    filter: grayscale(10%);
+  }
+  .lightbox-close {
+    position: absolute; top: 2rem; right: 2rem;
+    width: 44px; height: 44px;
+    background: none; border: 1px solid rgba(255,255,255,0.2);
+    cursor: none;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .lightbox-close:hover { border-color: var(--accent); transform: rotate(90deg); }
+  .lightbox-close::before,
+  .lightbox-close::after {
+    content: ''; position: absolute;
+    width: 16px; height: 1px; background: var(--white);
+  }
+  .lightbox-close::before { transform: rotate(45deg); }
+  .lightbox-close::after { transform: rotate(-45deg); }
+
+  /* ═══════════════════════════════════════
+     BEFORE / AFTER SECTION
+  ═══════════════════════════════════════ */
+  #before-after {
+    padding: 8rem 4%;
+    background: #0d0d0d;
+  }
+  .ba-container {
+    max-width: 900px;
+    margin: 4rem auto 0;
+    position: relative;
+    user-select: none;
+  }
+  .ba-wrapper {
+    position: relative;
+    overflow: hidden;
+    cursor: ew-resize;
+    line-height: 0;
+  }
+  .ba-after { width: 100%; display: block; filter: none; }
+  .ba-before-wrap {
+    position: absolute; top: 0; left: 0; height: 100%;
+    overflow: hidden;
+    width: 50%;
+    transition: none;
+  }
+  .ba-before {
+    display: block;
+    width: 900px; max-width: 900px;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%);
+  }
+  .ba-handle {
+    position: absolute; top: 0; bottom: 0;
+    left: 50%; transform: translateX(-50%);
+    width: 2px; background: var(--accent);
+    cursor: ew-resize;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10;
+  }
+  .ba-handle-circle {
+    width: 44px; height: 44px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 30px rgba(201,185,154,0.4);
+    flex-shrink: 0;
+  }
+  .ba-handle-circle svg { width: 18px; height: 18px; fill: var(--black); }
+  .ba-label {
+    position: absolute; top: 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--white);
+    background: rgba(10,10,10,0.7);
+    padding: 0.4rem 0.8rem;
+  }
+  .ba-label-before { left: 1.5rem; }
+  .ba-label-after { right: 1.5rem; }
+
+  /* ═══════════════════════════════════════
+     ABOUT SECTION
+  ═══════════════════════════════════════ */
+  #about {
+    padding: 8rem 4%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8rem;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  @media (max-width: 900px) {
+    #about { grid-template-columns: 1fr; gap: 4rem; }
+  }
+  .about-image-wrap {
+    position: relative;
+  }
+  .about-image-main {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    filter: grayscale(25%) contrast(1.05);
+    display: block;
+  }
+  .about-image-accent {
+    position: absolute;
+    bottom: -3rem; right: -3rem;
+    width: 55%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    filter: grayscale(40%);
+    border: 6px solid var(--black);
+  }
+  @media (max-width: 600px) {
+    .about-image-accent { display: none; }
+  }
+  .about-stat {
+    position: absolute; top: 2rem; left: -2rem;
+    background: var(--accent);
+    padding: 1.5rem 2rem;
+    text-align: center;
+  }
+  .about-stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem; font-weight: 300;
+    color: var(--black); line-height: 1;
+    display: block;
+  }
+  .about-stat-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.55rem; letter-spacing: 0.3em;
+    color: var(--black); text-transform: uppercase;
+    display: block; margin-top: 0.3rem;
+  }
+  .about-text .section-eyebrow { text-align: left; }
+  .about-text .section-title { text-align: left; }
+  .about-body {
+    font-family: 'Noto Serif Georgian', serif;
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 2;
+    color: var(--gray-200);
+    margin-top: 2rem;
+  }
+  .about-body p + p { margin-top: 1.5rem; }
+  .about-signature {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 2rem; font-weight: 300;
+    color: var(--accent);
+    margin-top: 3rem;
+  }
+
+  /* ═══════════════════════════════════════
+     FULLSCREEN QUOTE SECTION
+  ═══════════════════════════════════════ */
+  #quote {
+    min-height: 70vh;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    padding: 6rem 6%;
+    text-align: center;
+  }
+  .quote-bg {
+    position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1600&q=80&auto=format&fit=crop') center/cover;
+    filter: grayscale(60%) brightness(0.35) contrast(1.1);
+    transform: scale(1.05);
+    transition: transform 0.1s linear;
+  }
+  .quote-content {
+    position: relative; z-index: 2;
+    max-width: 800px;
+  }
+  .quote-mark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 8rem; font-weight: 300;
+    color: var(--accent); line-height: 0.5;
+    display: block; margin-bottom: 2rem;
+    opacity: 0.6;
+  }
+  .quote-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--white);
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+  }
+  .quote-author {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-top: 2.5rem;
+    display: block;
+  }
+
+  /* ═══════════════════════════════════════
+     PRICING SECTION
+  ═══════════════════════════════════════ */
+  #pricing {
+    padding: 8rem 4%;
+    background: var(--black);
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 5rem auto 0;
+  }
+  @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 1100px) and (min-width: 900px) { .pricing-grid { grid-template-columns: 1fr 1fr; } }
+
+  .pricing-card {
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 3rem 2.5rem;
+    position: relative;
+    transition: border-color 0.4s var(--ease-luxury), transform 0.4s var(--ease-luxury);
+    background: rgba(255,255,255,0.01);
+  }
+  .pricing-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-6px);
+  }
+  .pricing-card.featured {
+    border-color: var(--accent);
+    background: rgba(201,185,154,0.05);
+  }
+  .pricing-card.featured::before {
+    content: 'პოპულარული';
+    position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+    background: var(--accent);
+    color: var(--black);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 0.4rem 1.2rem;
+  }
+  .pricing-tier {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    color: var(--accent);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 1.5rem;
+  }
+  .pricing-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 300;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+  .pricing-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem; font-weight: 300;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .pricing-price sup {
+    font-size: 1.5rem;
+    vertical-align: super;
+    color: var(--gray-400);
+  }
+  .pricing-currency {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--gray-400);
+  }
+  .pricing-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.07);
+    margin: 2rem 0;
+  }
+  .pricing-features {
+    list-style: none;
+    margin-bottom: 3rem;
+  }
+  .pricing-features li {
+    font-family: 'Noto Serif Georgian', serif;
+    font-weight: 300;
+    font-size: 0.9rem;
+    color: var(--gray-200);
+    padding: 0.6rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .pricing-features li::before {
+    content: '';
+    width: 16px; height: 1px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .pricing-cta {
+    display: block; width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--white);
+    background: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 1.1rem;
+    cursor: none;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+  }
+  .pricing-cta:hover, .featured .pricing-cta {
+    background: var(--accent);
+    color: var(--black);
+    border-color: var(--accent);
+  }
+
+  /* ═══════════════════════════════════════
+     INSTAGRAM SECTION
+  ═══════════════════════════════════════ */
+  #instagram {
+    padding: 8rem 4%;
+    background: #0d0d0d;
+  }
+  .instagram-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+    max-width: 1400px;
+    margin: 4rem auto 0;
+  }
+  @media (max-width: 1000px) { .instagram-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 600px) { .instagram-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .insta-item {
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    position: relative;
+    cursor: none;
+  }
+  .insta-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: grayscale(30%) contrast(1.05);
+    transition: transform 0.7s var(--ease-luxury), filter 0.5s;
+  }
+  .insta-item:hover img {
+    transform: scale(1.08);
+    filter: grayscale(0%) contrast(1.1);
+  }
+  .insta-overlay {
+    position: absolute; inset: 0;
+    background: rgba(10,10,10,0.6);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    transition: opacity 0.4s var(--ease-luxury);
+  }
+  .insta-item:hover .insta-overlay { opacity: 1; }
+  .insta-icon svg { width: 24px; height: 24px; fill: var(--white); }
+  .insta-follow {
+    text-align: center;
+    margin-top: 4rem;
+  }
+
+  /* ═══════════════════════════════════════
+     FAQ SECTION
+  ═══════════════════════════════════════ */
+  #faq {
+    padding: 8rem 4%;
+    background: var(--black);
+  }
+  .faq-list {
+    max-width: 800px;
+    margin: 5rem auto 0;
+  }
+  .faq-item {
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+  .faq-item:last-child { border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .faq-question {
+    width: 100%;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 2rem 0;
+    background: none; border: none;
+    cursor: none;
+    text-align: left;
+    gap: 2rem;
+  }
+  .faq-q-text {
+    font-family: 'Noto Serif Georgian', serif;
+    font-size: 1.05rem; font-weight: 400;
+    color: var(--white);
+    line-height: 1.5;
+  }
+  .faq-icon {
+    width: 28px; height: 28px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.3s, transform 0.4s var(--ease-luxury), background 0.3s;
+    position: relative;
+  }
+  .faq-icon::before, .faq-icon::after {
+    content: ''; position: absolute;
+    background: var(--white);
+    transition: transform 0.4s var(--ease-luxury), opacity 0.3s;
+  }
+  .faq-icon::before { width: 10px; height: 1px; }
+  .faq-icon::after { width: 1px; height: 10px; }
+  .faq-item.open .faq-icon {
+    transform: rotate(45deg);
+    border-color: var(--accent);
+    background: rgba(201,185,154,0.1);
+  }
+  .faq-answer {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.6s var(--ease-luxury), padding 0.4s;
+  }
+  .faq-item.open .faq-answer { max-height: 500px; }
+  .faq-a-text {
+    font-family: 'Noto Serif Georgian', serif;
+    font-weight: 300;
+    font-size: 0.95rem;
+    color: var(--gray-200);
+    line-height: 2;
+    padding-bottom: 2rem;
+  }
+
+  /* ═══════════════════════════════════════
+     CONTACT SECTION
+  ═══════════════════════════════════════ */
+  #contact {
+    padding: 8rem 4%;
+    background: #0d0d0d;
+    text-align: center;
+  }
+  .contact-inner {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .contact-email {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.5rem, 4vw, 2.8rem);
+    font-weight: 300;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    display: inline-block;
+    margin: 2.5rem 0;
+    position: relative;
+    transition: color 0.3s;
+  }
+  .contact-email::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0; right: 0;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.5s var(--ease-luxury);
+    transform-origin: left;
+  }
+  .contact-email:hover { color: var(--accent); }
+  .contact-email:hover::after { transform: scaleX(1); }
+
+  .contact-phone {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    color: var(--gray-400);
+    text-decoration: none;
+    margin-bottom: 3rem;
+    transition: color 0.3s;
+  }
+  .contact-phone:hover { color: var(--accent); }
+
+  .social-links {
+    display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;
+    margin-top: 4rem;
+  }
+  .social-link {
+    display: flex; align-items: center; gap: 0.8rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 1rem 2rem;
+    transition: color 0.3s, border-color 0.3s, background 0.3s;
+  }
+  .social-link:hover {
+    color: var(--black);
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+  .social-link svg { width: 16px; height: 16px; fill: currentColor; }
+
+  /* FOOTER */
+  footer {
+    padding: 3rem 4%;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-copy {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--gray-600);
+    text-transform: uppercase;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    color: var(--gray-600);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  /* UTILITY */
+  .text-center { text-align: center; }
+
+  /* Photo images using Unsplash */
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor">
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+</div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-text">ნინო ბერიძე</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="#portfolio" onclick="closeMobileMenu()">პორტფოლიო</a></li>
+    <li><a href="#about" onclick="closeMobileMenu()">ჩემ შესახებ</a></li>
+    <li><a href="#pricing" onclick="closeMobileMenu()">ფასები</a></li>
+    <li><a href="#faq" onclick="closeMobileMenu()">კითხვები</a></li>
+    <li><a href="#contact" onclick="closeMobileMenu()">კონტაქტი</a></li>
+  </ul>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">ნ. ბერიძე</a>
+  <ul class="nav-links">
+    <li><a href="#portfolio">პორტფოლიო</a></li>
+    <li><a href="#about">ჩემ შესახებ</a></li>
+    <li><a href="#pricing">ფასები</a></li>
+    <li><a href="#faq">კითხვები</a></li>
+    <li><a href="#contact">კონტაქტი</a></li>
+  </ul>
+  <button class="nav-menu-btn" id="menuBtn" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">ქართლი · ტბილისი · 2018 — დღეს</p>
+    <h1 class="hero-title">სიყვარული<br><em>ფოტოებში</em></h1>
+    <p class="hero-sub">ყოველი მომენტი — ხელოვნების ნაწარმოები. სასიძო ფოტოგრაფია და სტუდიური სეანსები, რომლებიც გულს ეხება.</p>
+    <div class="hero-ctas">
+      <a href="#portfolio" class="btn-primary"><span>პორტფოლიოს ნახვა</span></a>
+      <a href="#contact" class="btn-ghost">დაკავშირება</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>გადაახვიე</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span class="marquee-text">სასიძო ფოტოგრაფია</span>
+    <span class="marquee-text marquee-dot">✦</span>
+    <span class="marquee-text">სტუდიური სეანსი</span>
+    <span class="marquee-text marquee-dot">✦</span>
+    <span class="marquee-text">პორტრეტული ფოტო</span>
+    <span class="marquee-text marquee-dot">✦</span>
+    <span class="marquee-text">საოჯახო ფოტოგრაფია</span>
+    <span class="marquee-text marquee-dot">✦</span>
+    <span class="marquee-text">სასიძო ფოტოგრაფია</span>
+    <span class="marquee-text marquee-dot">✦</span>
+    <span class="marquee-text">სტუდიური სეანსი</span>
+    <span class="marquee-text marquee-dot">✦</span>
+    <span class="marquee-text">პორტრეტული ფოტო</span>
+    <span class="marquee-text marquee-dot">✦</span>
+    <span class="marquee-text">საოჯახო ფოტოგრაფია</span>
+    <span class="marquee-text marquee-dot">✦</span>
+  </div>
+</div>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="section-header">
+    <span class="section-eyebrow reveal">ჩემი სამუშაო</span>
+    <h2 class="section-title reveal reveal-delay-1">შესწრებული <em>მომენტები</em></h2>
+    <div class="section-divider reveal reveal-delay-2"></div>
+  </div>
+
+  <div class="portfolio-tabs reveal reveal-delay-2">
+    <button class="tab-btn active" onclick="switchTab('wedding')">სასიძო</button>
+    <button class="tab-btn" onclick="switchTab('studio')">სტუდია</button>
+    <button class="tab-btn" onclick="switchTab('portrait')">პორტრეტი</button>
+  </div>
+
+  <div id="tab-wedding" class="tab-content active">
+    <div class="portfolio-grid">
+      <div class="portfolio-item reveal" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&q=80&auto=format&fit=crop" alt="სასიძო" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">ერთად, სამუდამოდ</span></div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-1" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1606800052052-a08af7148866?w=600&q=80&auto=format&fit=crop" alt="სასიძო" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">ნაზი მომენტი</span></div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-2" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80&auto=format&fit=crop" alt="სასიძო" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">სიყვარულის ცეკვა</span></div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-1" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=600&q=80&auto=format&fit=crop" alt="სასიძო" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">ოქროს შუქი</span></div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-2" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&q=80&auto=format&fit=crop" alt="სასიძო" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">ახალი სიცოცხლე</span></div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-3" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&q=80&auto=format&fit=crop" alt="სასიძო" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">მარადისობა</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-studio" class="tab-content">
+    <div class="portfolio-grid">
+      <div class="portfolio-item reveal" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80&auto=format&fit=crop" alt="სტუდია" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">სტუდიური პორტრეტი</span></div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-1" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80&auto=format&fit=crop" alt="სტუდია" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">დრამატული შუქი</span></div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-2" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80&auto=format&fit=crop" alt="სტუდია" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">სიმშვიდე</span></div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-1" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80&auto=format&fit=crop" alt="სტუდია" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">ელეგანტობა</span></div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-2" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80&auto=format&fit=crop" alt="სტუდია" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">ბუნებრიობა</span></div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-3" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&q=80&auto=format&fit=crop" alt="სტუდია" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">ნათელი</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-portrait" class="tab-content">
+    <div class="portfolio-grid">
+      <div class="portfolio-item reveal" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80&auto=format&fit=crop" alt="პორტრეტი" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">ემოცია</span></div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-1" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&auto=format&fit=crop" alt="პორტრეტი" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">სიღრმე</span></div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-2" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&q=80&auto=format&fit=crop" alt="პორტრეტი" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">სინათლე</span></div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-1" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&q=80&auto=format&fit=crop" alt="პორტრეტი" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">ბუნებრივობა</span></div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-2" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80&auto=format&fit=crop" alt="პორტრეტი" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">ხასიათი</span></div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-3" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1522556189639-b150ed9c4330?w=600&q=80&auto=format&fit=crop" alt="პორტრეტი" loading="lazy">
+        <div class="portfolio-overlay"><span class="portfolio-caption">სიწრფელე</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close"></button>
+  <img src="" id="lightboxImg" alt="">
+</div>
+
+<!-- BEFORE / AFTER -->
+<section id="before-after">
+  <div class="section-header">
+    <span class="section-eyebrow reveal">პოსტ-დამუშავება</span>
+    <h2 class="section-title reveal reveal-delay-1">ადრე <em>და</em> შემდეგ</h2>
+    <div class="section-divider reveal reveal-delay-2"></div>
+    <p class="reveal reveal-delay-3" style="font-family:'Montserrat',sans-serif;font-weight:200;font-size:0.8rem;letter-spacing:0.15em;color:var(--gray-400);max-width:400px;margin:0 auto;">გადაათრიე სლაიდერი გამოსახულების სანახავად</p>
+  </div>
+  <div class="ba-container reveal">
+    <div class="ba-wrapper" id="baWrapper">
+      <img class="ba-after" src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=900&q=90&auto=format&fit=crop" alt="შემდეგ">
+      <div class="ba-before-wrap" id="baBeforeWrap">
+        <img class="ba-before" src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=900&q=90&auto=format&fit=crop&sat=-100" alt="ადრე">
+      </div>
+      <div class="ba-handle" id="baHandle">
+        <div class="ba-handle-circle">
+          <svg viewBox="0 0 24 24"><path d="M8 5l-7 7 7 7M16 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+      <span class="ba-label ba-label-before">ადრე</span>
+      <span class="ba-label ba-label-after">შემდეგ</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-image-wrap reveal">
+    <img class="about-image-main" src="https://images.unsplash.com/photo-1452802447250-470a88ac82bc?w=700&q=80&auto=format&fit=crop" alt="ნინო ბერიძე">
+    <img class="about-image-accent" src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=400&q=80&auto=format&fit=crop" alt="სტუდიაში">
+    <div class="about-stat">
+      <span class="about-stat-num">300+</span>
+      <span class="about-stat-label">ბედნიერი წყვილი</span>
+    </div>
+  </div>
+  <div class="about-text">
+    <span class="section-eyebrow reveal">ჩემ შესახებ</span>
+    <h2 class="section-title reveal reveal-delay-1">გამარჯობა,<br>მე <em>ნინო</em> ვარ</h2>
+    <div class="about-body reveal reveal-delay-2">
+      <p>ფოტოგრაფია ჩემთვის უბრალო პროფესია არ არის — ეს ცხოვრების გზაა. 2018 წლიდან ვიღებ ყველაზე განსაკუთრებულ მომენტებს: ქორწინებებს, პირველ შეხვედრებს, ბოლო ცეკვებს.</p>
+      <p>ჩემი სტილი — ბუნებრივი, კინემატოგრაფიული და ემოციური. მე არ ვქმნი ხელოვნურ სცენებს — ვიჭერ ნამდვილ ისტორიებს, ნამდვილ გრძნობებს.</p>
+      <p>ყოველი სეანსი ჩემთვის ახალი სამყაროა. ყოველი სურათი — სიყვარულის ხელოვნება.</p>
+    </div>
+    <div class="about-signature reveal reveal-delay-3">ნინო ბ.</div>
+    <div class="reveal reveal-delay-4" style="margin-top:3rem;">
+      <a href="#contact" class="btn-primary"><span>სეანსის დაჯავშნა</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section id="quote">
+  <div class="quote-bg" id="quoteBg"></div>
+  <div class="quote-content reveal">
+    <span class="quote-mark">"</span>
+    <p class="quote-text">ფოტო არ ღებულობს ერთ წამს — ის ინახავს მარადისობას.</p>
+    <span class="quote-author">— ნინო ბერიძე</span>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-header">
+    <span class="section-eyebrow reveal">ინვესტიცია</span>
+    <h2 class="section-title reveal reveal-delay-1">სეანსების <em>პაკეტები</em></h2>
+    <div class="section-divider reveal reveal-delay-2"></div>
+  </div>
+  <div class="pricing-grid">
+
+    <div class="pricing-card reveal">
+      <span class="pricing-tier">საბაზო</span>
+      <div class="pricing-name">ვერცხლი</div>
+      <div class="pricing-price"><sup>₾</sup>800</div>
+      <div class="pricing-currency">Georgian Lari</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li>4 საათი ფოტოგრაფია</li>
+        <li>80+ რედაქტირებული ფოტო</li>
+        <li>ონლაინ გალერეა</li>
+        <li>1 ლოკაცია</li>
+        <li>2 კვირის მიწოდება</li>
+      </ul>
+      <a href="#contact" class="pricing-cta">დაჯავშნა</a>
+    </div>
+
+    <div class="pricing-card featured reveal reveal-delay-1">
+      <span class="pricing-tier">პოპულარული</span>
+      <div class="pricing-name">ოქრო</div>
+      <div class="pricing-price"><sup>₾</sup>1500</div>
+      <div class="pricing-currency">Georgian Lari</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li>8 საათი ფოტოგრაფია</li>
+        <li>200+ რედაქტირებული ფოტო</li>
+        <li>პრემიუმ ონლაინ გალერეა</li>
+        <li>2 ლოკაცია</li>
+        <li>USB ბარათი + ბეჭდვა</li>
+        <li>1 კვირის მიწოდება</li>
+      </ul>
+      <a href="#contact" class="pricing-cta">დაჯავშნა</a>
+    </div>
+
+    <div class="pricing-card reveal reveal-delay-2">
+      <span class="pricing-tier">პრემიუმ</span>
+      <div class="pricing-name">ბრილიანტი</div>
+      <div class="pricing-price"><sup>₾</sup>2500</div>
+      <div class="pricing-currency">Georgian Lari</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li>მთელი დღე — 12 საათი</li>
+        <li>400+ რედაქტირებული ფოტო</li>
+        <li>ფოტოწიგნი — 30 გვ.</li>
+        <li>3 ლოკაცია</li>
+        <li>USB + ბეჭდვა + ახსოვს</li>
+        <li>3 დღის მიწოდება</li>
+      </ul>
+      <a href="#contact" class="pricing-cta">დაჯავშნა</a>
+    </div>
+
+  </div>
+  <p class="text-center reveal" style="font-family:'Noto Serif Georgian',serif;font-size:0.85rem;color:var(--gray-400);margin-top:3rem;font-style:italic;">* ყველა პაკეტი მოიცავს უფასო საწყის კონსულტაციას</p>
+</section>
+
+<!-- INSTAGRAM FEED -->
+<section id="instagram">
+  <div class="section-header">
+    <span class="section-eyebrow reveal">სოციალური მედია</span>
+    <h2 class="section-title reveal reveal-delay-1">Instagram <em>გალერეა</em></h2>
+    <div class="section-divider reveal reveal-delay-2"></div>
+  </div>
+  <div class="instagram-grid">
+    <div class="insta-item reveal">
+      <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=300&q=80&auto=format&fit=crop" loading="lazy" alt="">
+      <div class="insta-overlay"><div class="insta-icon"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div></div>
+    </div>
+    <div class="insta-item reveal reveal-delay-1">
+      <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=300&q=80&auto=format&fit=crop" loading="lazy" alt="">
+      <div class="insta-overlay"><div class="insta-icon"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div></div>
+    </div>
+    <div class="insta-item reveal reveal-delay-2">
+      <img src="https://images.unsplash.com/photo-1606800052052-a08af7148866?w=300&q=80&auto=format&fit=crop" loading="lazy" alt="">
+      <div class="insta-overlay"><div class="insta-icon"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div></div>
+    </div>
+    <div class="insta-item reveal reveal-delay-1">
+      <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=300&q=80&auto=format&fit=crop" loading="lazy" alt="">
+      <div class="insta-overlay"><div class="insta-icon"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div></div>
+    </div>
+    <div class="insta-item reveal reveal-delay-2">
+      <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=300&q=80&auto=format&fit=crop" loading="lazy" alt="">
+      <div class="insta-overlay"><div class="insta-icon"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div></div>
+    </div>
+    <div class="insta-item reveal reveal-delay-3">
+      <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=300&q=80&auto=format&fit=crop" loading="lazy" alt="">
+      <div class="insta-overlay"><div class="insta-icon"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div></div>
+    </div>
+  </div>
+  <div class="insta-follow reveal">
+    <a href="#" class="btn-ghost" style="display:inline-block;margin-top:2rem;">@nino.beridze.photo</a>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-header">
+    <span class="section-eyebrow reveal">კითხვა-პასუხი</span>
+    <h2 class="section-title reveal reveal-delay-1">ხშირად <em>დასმული</em><br>კითხვები</h2>
+    <div class="section-divider reveal reveal-delay-2"></div>
+  </div>
+  <div class="faq-list reveal">
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">როგორ შევუკვეთო სეანსი?</span>
+        <div class="faq-icon"></div>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-a-text">სეანსის დასაჯავშნად დამიკავშირდით საკონტაქტო ფორმით ან ინსტაგრამის პირდაპირი შეტყობინებით. ჯავშნის დასადასტურებლად საჭიროა წინასწარი გადახდა. ვესაუბრებით, გავიგებ თქვენს სურვილებს და შევქმნი იდეალურ სეანსს.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">რამდენ ხანში მივიღებ მზა ფოტოებს?</span>
+        <div class="faq-icon"></div>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-a-text">სტანდარტული სეანსისთვის 2 კვირა, ქორწინებისთვის კი 3-4 კვირა. პრემიუმ პაკეტებისთვის ვასწრებ 1 კვირაში. ყველა ფოტო ერთად, პირადი ონლაინ გალერეის სახით გაიგზავნება.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">რა ჩაცმა გვურჩევთ სეანსისთვის?</span>
+        <div class="faq-icon"></div>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-a-text">ვურჩევ ნეიტრალური, ტიპის ფერებს — კრემი, ბეჟი, ნაცრისფერი, თეთრი, ან ღრმა ტონები. მოერიდეთ ლოგოებიანი ტანსაცმელს. ყველაზე მნიშვნელოვანია, რომ თავს კარგად გრძნობდეთ — ეს ფოტოზე ჩანს!</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">ვმოგზაურობ სეანსებისთვის?</span>
+        <div class="faq-icon"></div>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-a-text">დიახ, სიამოვნებით! ვმუშაობ მთელ საქართველოში. საქართველოს ფარგლებს გარეთ, გთხოვ დამიკავშირდეს ინდივიდუალური ფასის საუბრისთვის — ვიმოგზაურე ბათუმში, ყაზბეგში, სიღნაღში, და სხვაგანაც.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">შემიძლია ფოტოების დაბეჭდვა?</span>
+        <div class="faq-icon"></div>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-a-text">აბსოლუტურად! ყველა ფოტო მაღალ გარჩევადობაშია — ნებისმიერი ზომის ბეჭდვისთვის იდეალური. ოქრო და ბრილიანტი პაკეტებს USB ბარათი ახლავს. ასევე შეგვიძლია ჩამოვაბეჭდოთ და ჩამოვაოჭვოთ ნებისმიერ ზომაზე.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span class="faq-q-text">ამინდის შეცვლის შემთხვევაში?</span>
+        <div class="faq-icon"></div>
+      </button>
+      <div class="faq-answer">
+        <p class="faq-a-text">ბუნებრივია! განსაკუთრებული ამინდის შემთხვევაში — უჯრედო წვიმა, ქარი — სეანსი უფასოდ გადავადება. ამინდიც კი შეიძლება ლამაზ ფოტოდ იქცეს — ხშირად წვიმის შემდეგ ყველაზე მაგარი კადრები გამოდის!</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <span class="section-eyebrow reveal">კონტაქტი</span>
+    <h2 class="section-title reveal reveal-delay-1">მოვიდეთ<br><em>ერთად</em></h2>
+    <div class="section-divider reveal reveal-delay-2"></div>
+    <p class="reveal reveal-delay-2" style="font-family:'Noto Serif Georgian',serif;font-weight:300;font-size:1rem;color:var(--gray-200);line-height:2;max-width:500px;margin:0 auto 3rem;">მზად ვარ თქვენი ისტორია ლამაზ ფოტოებად ვაქციო. დამიკავშირდით და ვესაუბრებით!</p>
+    <a href="mailto:nino@beriphoto.ge" class="contact-email reveal reveal-delay-3">nino@beriphoto.ge</a>
+    <a href="tel:+995555123456" class="contact-phone reveal reveal-delay-4">+995 555 123 456</a>
+    <div class="social-links reveal reveal-delay-4">
+      <a href="#" class="social-link">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        Instagram
+      </a>
+      <a href="#" class="social-link">
+        <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        Facebook
+      </a>
+      <a href="tel:+995555123456" class="social-link">
+        <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        +995 555 123 456
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-copy">© 2025 ნინო ბერიძე. ყველა უფლება დაცულია.</span>
+  <a href="#" class="footer-logo">ნ. ბერიძე</a>
+  <span class="footer-copy">ტბილისი, საქართველო</span>
+</footer>
+
+<script>
+// ══════════════════════════
+// CURSOR
+// ══════════════════════════
+const cursorDot = document.getElementById('cursorDot');
+const cursorRing = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0;
+let ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  cursorDot.style.left = mouseX + 'px';
+  cursorDot.style.top = mouseY + 'px';
+});
+
+function animateCursor() {
+  ringX += (mouseX - ringX) * 0.12;
+  ringY += (mouseY - ringY) * 0.12;
+  cursorRing.style.left = ringX + 'px';
+  cursorRing.style.top = ringY + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+// ══════════════════════════
+// LOADER
+// ══════════════════════════
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 2200);
+});
+
+// ══════════════════════════
+// NAV SCROLL
+// ══════════════════════════
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('nav');
+  nav.classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// ══════════════════════════
+// MOBILE MENU
+// ══════════════════════════
+function toggleMobileMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+function closeMobileMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+// ══════════════════════════
+// REVEAL ON SCROLL
+// ══════════════════════════
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => observer.observe(el));
+
+// ══════════════════════════
+// PORTFOLIO TABS
+// ══════════════════════════
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', ['wedding','studio','portrait'][i] === name);
+  });
+  document.querySelectorAll('.tab-content').forEach(el => {
+    el.classList.toggle('active', el.id === 'tab-' + name);
+  });
+}
+
+// ══════════════════════════
+// LIGHTBOX
+// ══════════════════════════
+function openLightbox(el) {
+  const img = el.querySelector('img');
+  const lbImg = document.getElementById('lightboxImg');
+  lbImg.src = img.src.replace('w=600', 'w=1200');
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeLightbox();
+});
+
+// ══════════════════════════
+// BEFORE / AFTER SLIDER
+// ══════════════════════════
+(function() {
+  const wrapper = document.getElementById('baWrapper');
+  const beforeWrap = document.getElementById('baBeforeWrap');
+  const handle = document.getElementById('baHandle');
+  let dragging = false;
+
+  function setPosition(x) {
+    const rect = wrapper.getBoundingClientRect();
+    let pct = Math.max(0, Math.min(1, (x - rect.left) / rect.width));
+    beforeWrap.style.width = (pct * 100) + '%';
+    handle.style.left = (pct * 100) + '%';
+  }
+
+  wrapper.addEventListener('mousedown', e => { dragging = true; setPosition(e.clientX); });
+  window.addEventListener('mouseup', () => { dragging = false; });
+  window.addEventListener('mousemove', e => { if (dragging) setPosition(e.clientX); });
+  wrapper.addEventListener('touchstart', e => { dragging = true; setPosition(e.touches[0].clientX); }, { passive: true });
+  window.addEventListener('touchend', () => { dragging = false; });
+  window.addEventListener('touchmove', e => { if (dragging) setPosition(e.touches[0].clientX); }, { passive: true });
+})();
+
+// ══════════════════════════
+// PARALLAX QUOTE BG
+// ══════════════════════════
+window.addEventListener('scroll', () => {
+  const quoteBg = document.getElementById('quoteBg');
+  if (!quoteBg) return;
+  const rect = quoteBg.parentElement.getBoundingClientRect();
+  const center = rect.top + rect.height / 2 - window.innerHeight / 2;
+  quoteBg.style.transform = `scale(1.05) translateY(${center * 0.15}px)`;
+});
+
+// ══════════════════════════
+// FAQ ACCORDION
+// ══════════════════════════
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+</script>
+</body>
+</html>
